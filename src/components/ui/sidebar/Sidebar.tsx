@@ -1,5 +1,7 @@
+import { LogOutButton } from "@/components"
 import SidebarItem from "./SidebarItem"
-import { IoPersonOutline, IoBagHandleOutline, IoHomeOutline, IoScaleOutline, IoLogOutOutline, IoPersonAddOutline } from "react-icons/io5"
+import { IoPersonOutline, IoBagHandleOutline, IoHomeOutline, IoScaleOutline, IoLogOutOutline } from "react-icons/io5"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
 
 const linksSidebar = [
@@ -19,13 +21,17 @@ const linksSidebar = [
         path: '/dashboard/jobs'
     },
     {
-        icon: <IoScaleOutline  className="w-5 h-5 text-inherit"/>,
+        icon: <IoScaleOutline className="w-5 h-5 text-inherit" />,
         title: 'Postulaciones',
         path: '/dashboard/applications'
     },
 ]
 
-export default function Sidebar() {
+export default async function Sidebar() {
+
+    const session = await getServerSession()
+
+
     return (
         <aside className="bg-gradient-to-br from-gray-800 to-gray-900 -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0">
             <div className="relative border-b border-white/20">
@@ -45,22 +51,23 @@ export default function Sidebar() {
                     <li className="mx-3.5 mt-4 mb-2">
                         <p className="block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">auth pages</p>
                     </li>
-                    <li>
-                        <div>
-                            <button className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize" type="button">
-                                <IoLogOutOutline className="w-5 h-5 text-inherit" />
-                                <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">sign in</p>
-                            </button>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <button className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize" type="button">
-                                <IoPersonAddOutline className="w-5 h-5 text-inherit" />
-                                <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">sign up</p>
-                            </button>
-                        </div>
-                    </li>
+
+                    {
+                        session ? (
+                            <>
+                                <LogOutButton />
+                            </>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/auth/login"
+                                    className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize" type="button">
+                                    <IoLogOutOutline className="w-5 h-5 text-inherit" />
+                                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">sign in</p>
+                                </Link>
+                            </>
+                        )
+                    }
                 </ul>
             </div>
         </aside>

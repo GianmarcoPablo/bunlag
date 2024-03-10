@@ -1,15 +1,20 @@
 import { Navbar, Sidebar } from "@/components";
+import { redirect } from "next/navigation";
+import getSession from "@/helpers/get-session";
 
+export default async function DashBoardLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
 
+    const session = await getSession();
+    if (!session) {
+        redirect("/auth/login");
+    }
 
-
-export default function DashBoardLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
     return (
-        <div className="min-h-screen bg-gray-50/50">
+        <div>
             <Sidebar />
-            <div className="p-4 xl:ml-80">
-                <Navbar />
-                <main>
+            <div>
+                <main className="p-4 xl:ml-80">
+                    <Navbar />
                     {children}
                 </main>
             </div>
