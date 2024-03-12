@@ -10,7 +10,7 @@ export default function TopMenu() {
 
     return (
         <div className="flex px-5 py-3 justify-between items-center w-full bg-white">
-            <div>
+            <div className="flex items-center">
                 <Link
                     href="/"
                 >
@@ -20,17 +20,19 @@ export default function TopMenu() {
             </div>
 
 
+            <div
+                className="flex items-center border border-gray-300 rounded-md  transition-all hover:border-gray-500 px-2"
+            >
+                <IoSearchOutline  size={20} />
+                <input
+                    type="text"
+                    placeholder="Buscar empleo por puesto o palabra clave"
+                    className="p-2 rounded-md w-96 outline-none "
+                />
+            </div>
 
             {/**Search cart Menu */}
             <div className="flex items-center">
-                <Link
-                    href="/search"
-                    className="mx-2"
-                >
-                    <IoSearchOutline className="w--5 h-5" />
-                </Link>
-
-
                 <button
                     onClick={openMenu}
                     className="m-2 p-2 rounded-md transition-all hover:bg-gray-100"
