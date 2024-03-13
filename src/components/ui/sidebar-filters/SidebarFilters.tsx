@@ -40,15 +40,15 @@ export default function SidebarFilters() {
                     </select>
                 </div>
                 <div className="p-2">
-                    <label htmlFor="area" className="block text-lg font-medium text-gray-700">
+                    <label htmlFor="workplace" className="block text-lg font-medium text-gray-700">
                         <span className="flex items-center gap-2">
                             <IoCubeOutline size={20} />
                             Area
                         </span>
                     </label>
                     <select
-                        id="area"
-                        name="area"
+                        id="workplace"
+                        name="workplace"
                         className="mt-1 block w-full py-2 px-3 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-rose-500 focus:border-rose-500"
                     >
                         <option value="">-- Selecione --</option>

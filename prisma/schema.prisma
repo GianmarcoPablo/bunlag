@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum StatusApplication {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Account {
   id                       String  @id @default(uuid())
   userId                   String
@@ -41,23 +47,107 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(uuid())
-  name          String?
-  password      String?
-  roles         String[]  @default(["user"])
-  isActive      Boolean   @default(true)
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-}
-
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model User {
+  id              String           @id @default(uuid())
+  name            String?
+  password        String?
+  roles           String[]         @default(["user"])
+  isActive        Boolean          @default(true)
+  email           String?          @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  jobApplications JobApplication[]
+  company         Company?
+  curriculum      Curriculum?
+  FavoriteJob     FavoriteJob[]
+}
+
+model Company {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  email       String
+  location    String?
+  logo        String?
+  website     String?
+  phone       String?
+  jobs        Job[]
+  user        User?   @relation(fields: [userId], references: [id])
+  userId      String  @unique
+}
+
+model Job {
+  id                 String           @id @default(uuid())
+  jobTitle           String
+  modality           String
+  description        String
+  workLoad           String
+  location           String?
+  jobLevel           String?
+  minSalary          Float?
+  maxSalary          Float?
+  disability         Boolean          @default(false)
+  availableVacancies Int              @default(1)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  Company            Company?         @relation(fields: [companyId], references: [id])
+  companyId          String?
+  JobApplication     JobApplication[]
+  FavoriteJob        FavoriteJob[]
+  area               Area             @relation(fields: [areaId], references: [id])
+  areaId             String
+}
+
+model Area {
+  id   String @id @default(uuid())
+  name String
+  jobs Job[]
+}
+
+model JobApplication {
+  id                String            @id @default(uuid())
+  userId            String
+  jobId             String
+  statusApplication StatusApplication @default(PENDING)
+  createdAt         DateTime          @default(now())
+  user              User              @relation(fields: [userId], references: [id])
+  job               Job               @relation(fields: [jobId], references: [id])
+}
+
+model Curriculum {
+  id                     String   @id @default(uuid())
+  name                   String
+  lastName               String
+  email                  String
+  phone                  String
+  address                String
+  city                   String
+  state                  String
+  country                String
+  postalCode             String
+  professionalExperience String
+  education              String
+  skills                 String
+  languages              String
+  createdAt              DateTime @default(now())
+  user                   User?    @relation(fields: [userId], references: [id])
+  userId                 String   @unique
+}
+
+model FavoriteJob {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  job    Job    @relation(fields: [jobId], references: [id])
+  userId String
+  jobId  String
 }
